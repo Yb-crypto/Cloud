@@ -42,15 +42,15 @@ def get_rocket(rocket):
 
 @app.route('/rocket',methods=['POST'])
 def create_rocket():
-        session.execute("""INSERT INTO rocket.info(rocket_id,company,first_flight,active) VALUES('{}','{}',{},{})""".format(request.json['rocket_id'],request.json['company'],(date(request.$
+        session.execute("""INSERT INTO rocket.info(rocket_id,company,first_flight,active) VALUES('{}','{}',{},{})""".format(request.json['rocket_id'],request.json['company'],(date(request.json['first_flight'])),request.json['active']))
         return jsonify({'message': 'created: /rocket/{}'.format(request.json['rocket_id'])}),201
 @app.route('/rocket',methods=['PUT'])
 def update_rocket():
-        session.execute("""UPDATE rocket.info SET active = '{}' WHERE rocket_id=[]""".format(request.json['rocket_id'],request.json['active'])
+        session.execute("""UPDATE rocket.info SET active = '{}' WHERE rocket_id=[]""".format(request.json['rocket_id'],request.json['active']))
         return jsonify({'message': 'created: /rocket/{}'.format(request.json['rocket_id'])}),200
 @app.route('/rocket',methods=['DELETE'])
 def delete_rocket():    
-        session.execute("""DELETE FROM rocket.info WHERE id={}""".format(request.json['rocket_id'])})
+        session.execute("""DELETE FROM rocket.info WHERE id={}""".format(request.json['rocket_id']))
         return jsonify({'message': 'Deleted: /rocket/{}'.format(request.json['id'])}),200
 if __name__=="__main__":
     app.run(host='0.0.0.0',debug=True)
