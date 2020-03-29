@@ -1,15 +1,45 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response,redirect,url_for
 from cassandra.cluster import Cluster
+from datetime import date
+import jwt
+import datetime
 import json
 import requests
 import csv
+from functools import wraps
+
 cluster = Cluster(contact_points=['127.0.0.1'],port=9042)
 session = cluster.connect()
 
 app = Flask(__name__)
-from pprint import pprint
+
+app.config['SECRET_KEY'] = 'thisisthesecretkey'
+
+def token_required(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+                token = request.args.get('token')
+                if not token:
+                        return jsonify({'message' : 'token is missing'}),401
+
+                try:
+                        data  = jwt.decode(token, app.config['SECRET_KEY'])
+                except:
+                        return jsonify({'message' : 'Token is invalid'}),401
+                return f(*args, **kwargs)
+        return decorated
+
+@app.route('/')
+def login():
+        auth = request.authorization
+        if auth and auth.password =='password':
+                token = jwt.encode({'user' : auth.username, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=15)},app.config['SECRET_KEY'])
+                return redirect(url_for('profile')+'?token=token')
+        else:
+                return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required"'})
 
 @app.route('/rocket',methods=['GET'])
+@token_required
 def profile():
         rows = session.execute( """Select * from rocket.info""")
         result=[]
