@@ -13,7 +13,7 @@ session = cluster.connect()
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'thisisthesecretkey'
+app.config['SECRET_KEY'] = 'rocket'
 
 def token_required(f):
         @wraps(f)
