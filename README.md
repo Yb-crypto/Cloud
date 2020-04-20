@@ -10,15 +10,18 @@ If an incorrect password is provided, access will be denied and authentication w
 The information in the external API can be accessed using the URL http://ec2.........com:5000/rockets
 
 ### Functions and Requests
-This REST API allows you to perform actions in order to implement changes to a Cassandra NOSQL database using the following curl requests from a Terminal.
+This REST API allows you to perform actions in order to implement changes to a Cassandra database using the following curl requests from a Terminal.
 
+### Get Request 
+Example request
+curl -i -H "Content-Type: application/json" -X Get -d '{}'  http://ec2...com:5000/rockets
 ### Post Method
   Example request
-curl -i -H "Content-Type: application/json" -X Post -d '{"rocket_id":"Falcon9","company":"SpaceX","cost_per_launch":"5,000","type":"Merlin"}'http://ec2.........com:5000/rocket
-If this request is successful, a 200 response code will be returned.
+curl -i -H "Content-Type: application/json" -X Post -d '{"rocket_id":"Falcon 1","engine_propellant":"liquid oxygen","boosters":"0","second_stage_pay_load":"Composite Fairing","cost_per_launch":6700000,"country":"Republic of Marshall Islands","company":"SpaceX","type":"rocket"}' http://ec2...com:5000/rocket
+If this request is successful, a 201 response code will be returned.
 ### Put Method
   Example request
-curl -i -H "Content-Type: application/json" -X Put -d '{"rocket_id":"Falcon9","type":"Merlin"}'http://ec2.........com:5000/rocket
+curl -i -H "Content-Type: application/json" -X Put -d '{"rocket_id":"Starship","boosters":0,"second_stage_pay_load":"Merlin","country":"United States"}' http://ec2...com:5000/rocket
 If this request is successful, a 200 response code will be returned.
 ## Delete Method
   Example request
@@ -29,3 +32,5 @@ If this request is successful, a 200 response code will be returned.
 CREATE KEYSPACE rocket WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};
 
 CREATE TABLE rocket.info(rocket_id text PRIMARY KEY, Company text, cost_per_launch int, type text);
+
+alter table rocket.info add second_stage_pay_load text,engine_propellant text,country text, boosters int;
